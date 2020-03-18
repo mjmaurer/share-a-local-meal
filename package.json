@@ -21,6 +21,8 @@
     "react-github-btn": "^1.1.1",
     "react-helmet": "^5.2.1",
     "react-intl": "^4.1.1",
+    "react-intl-translations-manager": "^5.0.3",
+    "react-intl.macro": "^0.3.7",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0"
   },
@@ -39,12 +41,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "MESSAGE_DIR='./.messages' react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "translate": "node ./translationRunner.js"
   },
   "browserslist": {
     "production": [

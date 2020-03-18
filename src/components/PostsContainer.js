@@ -1,10 +1,4 @@
 import React from "react";
-import tw from "tailwind.macro";
-import styled from "@emotion/styled";
-
-const Container = styled.div`
-  ${tw`flex flex-wrap items-center justify-start w-full pt-side pl-side-1/2 pr-side-1/2`}
-`;
 
 class PostsContainer extends React.Component {
   constructor(props) {
@@ -59,11 +53,11 @@ class PostsContainer extends React.Component {
 
   render() {
     return (
-      <Container className={this.props.className}>
+      <div className={this.props.className}>
         {this.props.children
           .slice(0, this.state.postsToShow)
           .map((post, i) => this.props.renderPost(post, i))}
-      </Container>
+      </div>
     );
   }
 }

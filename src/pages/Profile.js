@@ -2,12 +2,15 @@ import React, { useContext } from "react";
 
 import { Helmet } from "react-helmet";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { FirebaseContext } from "utils/Firebase";
+import firebase from "firebase";
+import { FirebaseContext } from "../utils/Firebase";
 import Layout from "../components/Layout";
+import { useNavigateIntl } from "../components/IntlRouter";
 
-export default function Login() {
-  const firebase = useContext(FirebaseContext);
+export default function ProfilePage() {
+  const app = useContext(FirebaseContext);
   const [user, setUser] = React.useState();
+  const navigateIntl = useNavigateIntl();
   const authConfig = {
     callbacks: {
       // Called when the user has been successfully signed in.
@@ -15,19 +18,12 @@ export default function Login() {
         if (authResult.user) {
           setUser(authResult.user);
         }
-        if (authResult.additionalUserInfo) {
-          document.getElementById("is-new-user").textContent = authResult
-            .additionalUserInfo.isNewUser
-            ? "New User"
-            : "Existing User";
-        }
-        // Do not redirect.
+        navigateIntl(`/deliveries/${authResult.user.uid}`);
         return false;
       }
     },
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
     signInSuccessUrl: "/signedIn",
-    // We will display Google and Facebook as auth providers.
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       {
@@ -56,11 +52,11 @@ export default function Login() {
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" /> */}
       </Helmet>
-      {user}
-      <StyledFirebaseAuth
-        uiConfig={authConfig}
-        firebaseAuth={firebase.auth()}
-      />
+      {user ? (
+        user.email
+      ) : (
+        <StyledFirebaseAuth uiConfig={authConfig} firebaseAuth={app.auth()} />
+      )}
     </Layout>
   );
 }

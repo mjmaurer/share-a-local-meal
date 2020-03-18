@@ -1,18 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./style/global.css";
-import FirebaseProvider from "utils/Firebase";
+import CssBaseline from "@material-ui/core/CssBaseline";
+
 import { ThemeProvider } from "@material-ui/core/styles";
+import FirebaseProvider from "./utils/Firebase";
 import theme from "./style/Theme";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
-    <FirebaseProvider>
-      <App />
-    </FirebaseProvider>
-  </ThemeProvider>,
+  <>
+    <CssBaseline />
+    <ThemeProvider theme={theme}>
+      <FirebaseProvider>
+        <App />
+      </FirebaseProvider>
+    </ThemeProvider>
+  </>,
   document.getElementById("root")
 );
 
