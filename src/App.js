@@ -1,13 +1,17 @@
 import React from "react";
 import IntlRouter from "./components/IntlRouter";
+import Layout from "./components/Layout";
 import Home from "./pages/Home";
-import Profile from "./pages/Profile";
+import Login from "./pages/Login";
+import "./style/globals.css";
 
 function App() {
   return (
     <IntlRouter>
-      <Home path="/" />
-      <Profile path="/profile" />
+      <Layout path="/">
+        <Home path="/" />
+        <Login path="/login" />
+      </Layout>
     </IntlRouter>
   );
 }

@@ -2,9 +2,7 @@ import React from "react";
 import { Router, Redirect, navigate, Link as RouterLink } from "@reach/router";
 import { IntlProvider, useIntl } from "react-intl";
 import Link from "@material-ui/core/Link";
-import translations from "../i18n/locales";
-
-const SUPPORTED_LANG = ["en", "es"];
+import translations, { SUPPORTED_LANGS } from "../i18n/locales";
 
 const polyfillIntl = language => {
   const locale = language.split("-")[0];
@@ -24,7 +22,7 @@ const polyfillIntl = language => {
 };
 
 const LangRoute = ({ lang, children }) => {
-  const supportedLang = SUPPORTED_LANG.includes(lang) ? lang : "en";
+  const supportedLang = lang in SUPPORTED_LANGS ? lang : "en";
   polyfillIntl(supportedLang);
   return (
     <IntlProvider
@@ -36,6 +34,15 @@ const LangRoute = ({ lang, children }) => {
     </IntlProvider>
   );
 };
+
+export default function IntlRouter({ children }) {
+  return (
+    <Router>
+      <Redirect from="/" to="/en" />
+      <LangRoute path=":lang">{children}</LangRoute>
+    </Router>
+  );
+}
 
 export const IntlLink = ({ to, children, className }) => {
   const intl = useIntl();
@@ -54,12 +61,3 @@ export const useNavigateIntl = () => {
   const intl = useIntl();
   return pathFromIntl => navigate(`/${intl.locale}${pathFromIntl}`);
 };
-
-export default function IntlRouter({ children }) {
-  return (
-    <Router>
-      <Redirect from="/" to="/en" />
-      <LangRoute path=":lang">{children}</LangRoute>
-    </Router>
-  );
-}

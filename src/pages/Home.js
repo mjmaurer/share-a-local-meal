@@ -1,10 +1,9 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import Layout from "../components/Layout";
 
 export default function HomePage() {
   return (
-    <Layout>
+    <>
       <Helmet>
         {/* <meta name="description" content={siteMetadata.contactDescription} />
           <meta
@@ -22,6 +21,6 @@ export default function HomePage() {
           <meta property="og:image:height" content="630" /> */}
       </Helmet>
       <div>Index</div>
-    </Layout>
+    </>
   );
 }

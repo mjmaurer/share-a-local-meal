@@ -1,3 +1,9 @@
 {
+  "app.drawer.makedelivery": "Hacer una Entrega",
+  "app.drawer.mydeliveries": "Mis Entregas",
+  "app.drawer.requestdelivery": "Solicitar Entrega",
+  "app.nav.lang.help": "Ayuda a Traducir",
+  "app.nav.login": "Iniciar Sesión",
+  "app.nav.logout": "Cerrar Sesión",
   "app.title": "Manos Invisibles"
 }
