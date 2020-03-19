@@ -68,7 +68,7 @@ export default function MenuAppBar({ children }) {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="sticky">
         <Helmet
           titleTemplate="Invisible Hands Deliver | %s"
           defaultTitle="Invisible Hands Deliver"

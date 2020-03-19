@@ -12,6 +12,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { defineMessages } from "react-intl.macro";
 import PersonIcon from "@material-ui/icons/Person";
 import HomeIcon from "@material-ui/icons/Home";
+import { IntlLink } from "./IntlRouter";
 
 const messages = defineMessages({
   "app.drawer.requestdelivery": {
@@ -39,6 +40,12 @@ const useStyles = makeStyles(theme => ({
   },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
+  link: {
+    color: "inherit",
+    "&:hover": {
+      textDecoration: "none"
+    }
+  },
   drawerIcon: {
     minWidth: 0
   },
@@ -50,13 +57,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const DrawerItem = ({ icon, text }) => {
+const DrawerItem = ({ icon, text, route }) => {
   const classes = useStyles();
   return (
-    <ListItem button>
-      <ListItemIcon className={classes.drawerIcon}>{icon}</ListItemIcon>
-      <ListItemText className={classes.drawerText} primary={text} />
-    </ListItem>
+    <IntlLink className={classes.link} to={route}>
+      <ListItem button>
+        <ListItemIcon className={classes.drawerIcon}>{icon}</ListItemIcon>
+        <ListItemText className={classes.drawerText} primary={text} />
+      </ListItem>
+    </IntlLink>
   );
 };
 
@@ -72,14 +81,17 @@ export default function DrawerMenu({ container, isMobileOpen, mobileToggle }) {
       <List>
         <DrawerItem
           icon={<HomeIcon />}
+          route="/request"
           text={intl.formatMessage(messages["app.drawer.requestdelivery"])}
         />
         <DrawerItem
           icon={<MotorcycleIcon />}
+          route="/open-deliveries"
           text={intl.formatMessage(messages["app.drawer.makedelivery"])}
         />
         <DrawerItem
           icon={<PersonIcon />}
+          route="/"
           text={intl.formatMessage(messages["app.drawer.mydeliveries"])}
         />
       </List>
