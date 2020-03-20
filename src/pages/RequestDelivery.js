@@ -2,26 +2,56 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import { useForm } from "react-hook-form";
-import { useIntl } from "react-intl";
+import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
+import SendRoundedIcon from "@material-ui/icons/SendRounded";
+import { useIntl, FormattedMessage } from "react-intl";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
 import { defineMessages } from "react-intl.macro";
 
-const FORM_MARGIN_SCALE = 4;
+const FORM_X_MARGIN_SCALE = 1;
+const Y_MARGIN_SCALE = 1.5;
 
 const useStyles = makeStyles(theme => ({
   root: {
+    marginTop: theme.spacing(Y_MARGIN_SCALE),
+    display: "flex",
+    flexWrap: "wrap",
+    [theme.breakpoints.up("md")]: {
+      flexWrap: "nowrap"
+    }
+  },
+  textRoot: {
+    minWidth: "45%"
+  },
+  text: {
+    marginTop: theme.spacing(Y_MARGIN_SCALE),
+    marginBottom: theme.spacing(Y_MARGIN_SCALE)
+  },
+  form: {
+    marginTop: theme.spacing(Y_MARGIN_SCALE),
+    marginBottom: theme.spacing(Y_MARGIN_SCALE),
+    marginLeft: theme.spacing(FORM_X_MARGIN_SCALE),
+    marginRight: theme.spacing(FORM_X_MARGIN_SCALE),
     display: "flex",
     flexWrap: "wrap"
   },
+  button: {
+    marginLeft: theme.spacing(FORM_X_MARGIN_SCALE),
+    marginTop: theme.spacing(Y_MARGIN_SCALE),
+    marginBottom: theme.spacing(Y_MARGIN_SCALE),
+    width: "30%"
+  },
   fieldHalfWidth: {
-    marginLeft: theme.spacing(FORM_MARGIN_SCALE),
-    marginRight: theme.spacing(FORM_MARGIN_SCALE),
-    width: `calc(50% - (2 * ${theme.spacing(FORM_MARGIN_SCALE)}px))`
+    marginLeft: theme.spacing(FORM_X_MARGIN_SCALE),
+    marginRight: theme.spacing(FORM_X_MARGIN_SCALE),
+    width: `calc(50% - (2 * ${theme.spacing(FORM_X_MARGIN_SCALE)}px))`
   },
   fieldFullWidth: {
-    marginLeft: theme.spacing(FORM_MARGIN_SCALE),
-    marginRight: theme.spacing(FORM_MARGIN_SCALE),
-    width: `calc(100% - (2 * ${theme.spacing(FORM_MARGIN_SCALE)}px))`
+    marginLeft: theme.spacing(FORM_X_MARGIN_SCALE),
+    marginRight: theme.spacing(FORM_X_MARGIN_SCALE),
+    width: `calc(100% - (2 * ${theme.spacing(FORM_X_MARGIN_SCALE)}px))`
   }
 }));
 
@@ -123,8 +153,9 @@ const messages = defineMessages({
 export default function RequestDelivery() {
   const classes = useStyles();
   const intl = useIntl();
-  const { register, handleSubmit, watch, errors } = useForm();
-
+  const handleSubmit = event => {
+    event.preventDefault();
+  };
   return (
     <>
       <Helmet>
@@ -143,153 +174,179 @@ export default function RequestDelivery() {
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" /> */}
       </Helmet>
-
-      <form className={classes.root} noValidate autoComplete="off">
-        <TextField
-          label={intl.formatMessage(messages["app.request.form.firstname"])}
-          id="firstname"
-          autoComplete="given-name"
-          type="text"
-          variant="outlined"
-          required
-          margin="normal"
-          className={classes.fieldHalfWidth}
-        />
-        <TextField
-          label={intl.formatMessage(messages["app.request.form.lastname"])}
-          id="lastname"
-          autoComplete="family-name"
-          type="text"
-          variant="outlined"
-          required
-          margin="normal"
-          className={classes.fieldHalfWidth}
-        />
-        <TextField
-          label={intl.formatMessage(messages["app.request.form.phone"])}
-          id="phone"
-          autoComplete="tel"
-          type="tel"
-          required
-          variant="outlined"
-          margin="normal"
-          className={classes.fieldFullWidth}
-        />
-        <TextField
-          label={intl.formatMessage(messages["app.request.form.email"])}
-          id="email"
-          autoComplete="email"
-          type="email"
-          margin="normal"
-          variant="outlined"
-          className={classes.fieldFullWidth}
-        />
-        <TextField
-          label={intl.formatMessage(messages["app.request.form.address"])}
-          helperText={intl.formatMessage(
-            messages["app.request.form.address.help"]
-          )}
-          id="address"
-          margin="normal"
-          autoComplete="street-address"
-          type="text"
-          variant="outlined"
-          required
-          className={classes.fieldFullWidth}
-        />
-        <TextField
-          label={intl.formatMessage(messages["app.request.form.postal"])}
-          id="postal"
-          margin="normal"
-          autoComplete="postal-code"
-          type="text"
-          variant="outlined"
-          required
-          className={classes.fieldFullWidth}
-        />
-        <TextField
-          label={intl.formatMessage(messages["app.request.form.neighborhood"])}
-          id="neighborhood"
-          placeholder={intl.formatMessage(
-            messages["app.request.form.neighborhood.placeholder"]
-          )}
-          margin="normal"
-          variant="outlined"
-          required
-          className={classes.fieldFullWidth}
-        />
-        <TextField
-          label={intl.formatMessage(messages["app.request.form.items"])}
-          helperText={intl.formatMessage(
-            messages["app.request.form.items.help"]
-          )}
-          id="grocery-list"
-          rowsMax="10"
-          rows="5"
-          multiline
-          variant="outlined"
-          margin="normal"
-          required
-          className={classes.fieldFullWidth}
-        />
-        <TextField
-          label={intl.formatMessage(messages["app.request.form.store"])}
-          helperText={intl.formatMessage(
-            messages["app.request.form.store.help"]
-          )}
-          id="store"
-          margin="normal"
-          variant="outlined"
-          required
-          className={classes.fieldFullWidth}
-        />
-        <TextField
-          label={intl.formatMessage(messages["app.request.form.payment"])}
-          helperText={intl.formatMessage(
-            messages["app.request.form.payment.help"]
-          )}
-          select
-          SelectProps={{
-            native: true
-          }}
-          margin="normal"
-          variant="outlined"
-          required
-          className={classes.fieldFullWidth}
+      <Box className={classes.root}>
+        <Container className={classes.textRoot}>
+          <Typography className={classes.text} variant="h4">
+            Request a Delivery
+          </Typography>
+          <Typography className={classes.text} variant="body1">
+            blah blah balajsdf Request a Delivery Request a Delivery Request a
+            Delivery Request a Delivery Request a Delivery Request a Delivery
+            Request a Delivery Request a Delivery
+          </Typography>
+        </Container>
+        <form
+          className={classes.form}
+          onSubmit={handleSubmit}
+          autoComplete="off"
         >
-          <option value="pay-ahead">
-            {intl.formatMessage(messages["app.request.form.payment.ahead"])}
-          </option>
-          <option value="pay-volunteer-before">
-            {intl.formatMessage(messages["app.request.form.payment.before"])}
-          </option>
-          <option value="pay-volunteer-after">
-            {intl.formatMessage(messages["app.request.form.payment.after"])}
-          </option>
-        </TextField>
-        <TextField
-          label={intl.formatMessage(messages["app.request.form.notes"])}
-          id="notes"
-          margin="normal"
-          rowsMax="5"
-          variant="outlined"
-          multiline
-          className={classes.fieldFullWidth}
-        />
-        <TextField
-          label={intl.formatMessage(messages["app.request.form.subsidy"])}
-          helperText={intl.formatMessage(
-            messages["app.request.form.subsidy.help"]
-          )}
-          id="subsidy"
-          placeholder={intl.formatMessage(
-            messages["app.request.form.subsidy.placeholder"]
-          )}
-          variant="outlined"
-          margin="normal"
-          className={classes.fieldFullWidth}
-        />
-      </form>
+          <TextField
+            label={intl.formatMessage(messages["app.request.form.firstname"])}
+            id="firstname"
+            autoComplete="given-name"
+            type="text"
+            variant="outlined"
+            required
+            margin="normal"
+            className={classes.fieldHalfWidth}
+          />
+          <TextField
+            label={intl.formatMessage(messages["app.request.form.lastname"])}
+            id="lastname"
+            autoComplete="family-name"
+            type="text"
+            variant="outlined"
+            required
+            margin="normal"
+            className={classes.fieldHalfWidth}
+          />
+          <TextField
+            label={intl.formatMessage(messages["app.request.form.phone"])}
+            id="phone"
+            autoComplete="tel"
+            type="tel"
+            required
+            variant="outlined"
+            margin="normal"
+            className={classes.fieldFullWidth}
+          />
+          <TextField
+            label={intl.formatMessage(messages["app.request.form.email"])}
+            id="email"
+            autoComplete="email"
+            type="email"
+            margin="normal"
+            variant="outlined"
+            className={classes.fieldFullWidth}
+          />
+          <TextField
+            label={intl.formatMessage(messages["app.request.form.address"])}
+            helperText={intl.formatMessage(
+              messages["app.request.form.address.help"]
+            )}
+            id="address"
+            margin="normal"
+            autoComplete="street-address"
+            type="text"
+            variant="outlined"
+            required
+            className={classes.fieldFullWidth}
+          />
+          <TextField
+            label={intl.formatMessage(messages["app.request.form.postal"])}
+            id="postal"
+            margin="normal"
+            autoComplete="postal-code"
+            type="text"
+            variant="outlined"
+            required
+            className={classes.fieldFullWidth}
+          />
+          <TextField
+            label={intl.formatMessage(
+              messages["app.request.form.neighborhood"]
+            )}
+            id="neighborhood"
+            placeholder={intl.formatMessage(
+              messages["app.request.form.neighborhood.placeholder"]
+            )}
+            margin="normal"
+            variant="outlined"
+            required
+            className={classes.fieldFullWidth}
+          />
+          {/* TODO persist this in localstorage  */}
+          <TextField
+            label={intl.formatMessage(messages["app.request.form.items"])}
+            helperText={intl.formatMessage(
+              messages["app.request.form.items.help"]
+            )}
+            id="grocery-list"
+            rowsMax="10"
+            rows="5"
+            multiline
+            variant="outlined"
+            margin="normal"
+            required
+            className={classes.fieldFullWidth}
+          />
+          <TextField
+            label={intl.formatMessage(messages["app.request.form.store"])}
+            helperText={intl.formatMessage(
+              messages["app.request.form.store.help"]
+            )}
+            id="store"
+            margin="normal"
+            variant="outlined"
+            required
+            className={classes.fieldFullWidth}
+          />
+          <TextField
+            label={intl.formatMessage(messages["app.request.form.payment"])}
+            helperText={intl.formatMessage(
+              messages["app.request.form.payment.help"]
+            )}
+            select
+            SelectProps={{
+              native: true
+            }}
+            margin="normal"
+            variant="outlined"
+            required
+            className={classes.fieldFullWidth}
+          >
+            <option value="pay-ahead">
+              {intl.formatMessage(messages["app.request.form.payment.ahead"])}
+            </option>
+            <option value="pay-volunteer-before">
+              {intl.formatMessage(messages["app.request.form.payment.before"])}
+            </option>
+            <option value="pay-volunteer-after">
+              {intl.formatMessage(messages["app.request.form.payment.after"])}
+            </option>
+          </TextField>
+          <TextField
+            label={intl.formatMessage(messages["app.request.form.notes"])}
+            id="notes"
+            margin="normal"
+            rowsMax="5"
+            variant="outlined"
+            multiline
+            className={classes.fieldFullWidth}
+          />
+          <TextField
+            label={intl.formatMessage(messages["app.request.form.subsidy"])}
+            helperText={intl.formatMessage(
+              messages["app.request.form.subsidy.help"]
+            )}
+            id="subsidy"
+            placeholder={intl.formatMessage(
+              messages["app.request.form.subsidy.placeholder"]
+            )}
+            variant="outlined"
+            margin="normal"
+            className={classes.fieldFullWidth}
+          />
+          <Button
+            variant="outlined"
+            startIcon={<SendRoundedIcon />}
+            className={classes.button}
+            type="submit"
+          >
+            <FormattedMessage id="app.form.submit" defaultMessage="Submit" />
+          </Button>
+        </form>
+      </Box>
     </>
   );
 }

@@ -21,8 +21,9 @@ const polyfillIntl = language => {
   }
 };
 
-const LangRoute = ({ lang, children }) => {
+const LangRoute = ({ lang, children, location }) => {
   const supportedLang = lang in SUPPORTED_LANGS ? lang : "en";
+  React.useEffect(() => window.scrollTo(0, 0), [location.pathname]);
   polyfillIntl(supportedLang);
   return (
     <IntlProvider

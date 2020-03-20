@@ -24,6 +24,7 @@ const useStyles = makeStyles(theme => ({
       visibility: "hidden"
     }
   },
+  toolbar: theme.mixins.toolbar,
   drawerPadding: {
     [theme.breakpoints.up("sm")]: {
       marginLeft: DRAWER_WIDTH
@@ -68,7 +69,7 @@ export default function MenuAppBar({ children }) {
 
   return (
     <>
-      <AppBar position="sticky">
+      <AppBar position="fixed">
         <Helmet
           titleTemplate="Invisible Hands Deliver | %s"
           defaultTitle="Invisible Hands Deliver"
@@ -121,7 +122,10 @@ export default function MenuAppBar({ children }) {
         </Toolbar>
       </AppBar>
       <Drawer isMobileOpen={isMobileOpen} mobileToggle={mobileToggle} />
-      <Box className={classes.drawerPadding}>{children}</Box>
+        <div className={classes.toolbar} />
+      <Box className={classes.drawerPadding}>
+        {children}
+      </Box>
     </>
   );
 }
