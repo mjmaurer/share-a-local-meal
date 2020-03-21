@@ -122,10 +122,8 @@ export default function MenuAppBar({ children }) {
         </Toolbar>
       </AppBar>
       <Drawer isMobileOpen={isMobileOpen} mobileToggle={mobileToggle} />
-        <div className={classes.toolbar} />
-      <Box className={classes.drawerPadding}>
-        {children}
-      </Box>
+      <div className={classes.toolbar} />
+      <Box className={classes.drawerPadding}>{children}</Box>
     </>
   );
 }

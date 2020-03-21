@@ -1,12 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
-import { Helmet } from "react-helmet";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import Container from "@material-ui/core/Container";
+import { useAuthState } from "react-firebase-hooks/auth";
 import firebase from "firebase";
 import { makeStyles } from "@material-ui/core/styles";
 import { FirebaseContext } from "../utils/Firebase";
 import { useNavigateIntl } from "../components/IntlRouter";
+import JustTextContent from "../components/JustTextContext";
 
 const useStyles = makeStyles(theme => ({
   authBox: {
@@ -17,21 +18,37 @@ const useStyles = makeStyles(theme => ({
 export default function LoginPage() {
   const classes = useStyles();
   const app = useContext(FirebaseContext);
-  const [user, setUser] = React.useState();
+  const [user] = useAuthState(app.auth());
+  const [error, setError] = useState(null);
   const navigateIntl = useNavigateIntl();
+
+  if (user) {
+    app
+      .firestore()
+      .collection("volunteers")
+      .doc(user.uid)
+      .set(
+        {
+          uid: user.uid,
+          incompleteAssignments: firebase.firestore.FieldValue.increment(0),
+          totalAssignments: firebase.firestore.FieldValue.increment(0),
+          email: user.email
+        },
+        { merge: true }
+      )
+      .then(() => {
+        navigateIntl(`/${user.uid}/assigned-requests`);
+      })
+      .catch(e => setError(e));
+  }
+
   const authConfig = {
     callbacks: {
       // Called when the user has been successfully signed in.
       signInSuccessWithAuthResult(authResult, redirectUrl) {
-        if (authResult.user) {
-          setUser(authResult.user);
-        }
-        navigateIntl(`/deliveries/${authResult.user.uid}`);
         return false;
       }
     },
-    // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-    signInSuccessUrl: "/signedIn",
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       {
@@ -43,24 +60,8 @@ export default function LoginPage() {
 
   return (
     <>
-      <Helmet>
-        {/* <meta name="description" content={siteMetadata.contactDescription} />
-        <meta
-          property="og:description"
-          content={siteMetadata.contactDescription}
-        /> */}
-        <title>Login</title>
-        <meta property="og:title" content="Login" />
-        {/* <meta property="og:url" content="" /> */}
-        <meta property="og:type" content="article" />
-        {/* <meta
-            property="og:image"
-            content={`https://www.nickbmason.com${image.localFile.image.fixed.src}`}
-          />
-          <meta property="og:image:width" content="1200" />
-          <meta property="og:image:height" content="630" /> */}
-      </Helmet>
-      {user ? null : (
+      {error && <JustTextContent body="Could not authenticate" />}
+      {!user && (
         <Container className={classes.authBox}>
           <StyledFirebaseAuth uiConfig={authConfig} firebaseAuth={app.auth()} />
         </Container>

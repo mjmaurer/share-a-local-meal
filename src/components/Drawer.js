@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
@@ -9,25 +9,12 @@ import { useIntl } from "react-intl";
 import ListItemText from "@material-ui/core/ListItemText";
 import MotorcycleIcon from "@material-ui/icons/Motorcycle";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { defineMessages } from "react-intl.macro";
 import PersonIcon from "@material-ui/icons/Person";
 import HomeIcon from "@material-ui/icons/Home";
+import { useAuthState } from "react-firebase-hooks/auth";
+import messages from "../i18n/Messages";
 import { IntlLink } from "./IntlRouter";
-
-const messages = defineMessages({
-  "app.drawer.requestdelivery": {
-    id: "app.drawer.requestdelivery",
-    defaultMessage: "Request Delivery"
-  },
-  "app.drawer.makedelivery": {
-    id: "app.drawer.makedelivery",
-    defaultMessage: "Make Delivery"
-  },
-  "app.drawer.mydeliveries": {
-    id: "app.drawer.mydeliveries",
-    defaultMessage: "My Deliveries"
-  }
-});
+import { FirebaseContext } from "../utils/Firebase";
 
 export const DRAWER_WIDTH = 260;
 
@@ -73,6 +60,11 @@ export default function DrawerMenu({ container, isMobileOpen, mobileToggle }) {
   const classes = useStyles();
   const theme = useTheme();
   const intl = useIntl();
+  const app = useContext(FirebaseContext);
+  const [user] = useAuthState(app.auth());
+  const assignedRequestRoute = user
+    ? `/${user.uid}/assigned-requests`
+    : "/login";
 
   const drawer = (
     <div>
@@ -86,12 +78,12 @@ export default function DrawerMenu({ container, isMobileOpen, mobileToggle }) {
         />
         <DrawerItem
           icon={<MotorcycleIcon />}
-          route="/open-deliveries"
+          route="/open-requests"
           text={intl.formatMessage(messages["app.drawer.makedelivery"])}
         />
         <DrawerItem
           icon={<PersonIcon />}
-          route="/"
+          route={assignedRequestRoute}
           text={intl.formatMessage(messages["app.drawer.mydeliveries"])}
         />
       </List>
